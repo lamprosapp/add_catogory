@@ -176,7 +176,7 @@
             // Send POST request
             fetch('https://lampros-backend.vercel.app/api/category/category', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json','token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDc3NTY1OWFhOTY1ODAxZDZlYjc4MCIsImlhdCI6MTcyODU0MzQ5OCwiZXhwIjoxNzMxMTM1NDk4fQ.0oFZ0EyrtZUQQT1xEgF2yeRgKSzgtHyOYO2Dq-GBtlk' },
+                headers: { 'Content-Type': 'application/json','Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDc3NTY1OWFhOTY1ODAxZDZlYjc4MCIsImlhdCI6MTcyODU0MzQ5OCwiZXhwIjoxNzMxMTM1NDk4fQ.0oFZ0EyrtZUQQT1xEgF2yeRgKSzgtHyOYO2Dq-GBtlk' },
                 body: JSON.stringify(categoryData)
             })
             .then(response => response.json())
