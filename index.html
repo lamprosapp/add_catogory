@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Category</title>
+</head>
+<body>
+    <h2>Add Category</h2>
+    <form id="categoryForm">
+        <div>
+            <label for="categoryName">Category Name:</label>
+            <input type="text" id="categoryName" name="name" required>
+        </div>
+        <div>
+            <label for="categoryDescription">Category Description:</label>
+            <input type="text" id="categoryDescription" name="description" required>
+        </div>
+        <div>
+            <label for="categoryImageURL">Category Image URL:</label>
+            <input type="url" id="categoryImageURL" name="categoryImageURL" required>
+        </div>
+        <div>
+            <label for="categoryImageAltText">Category Image Alt Text:</label>
+            <input type="text" id="categoryImageAltText" name="categoryImageAltText" required>
+        </div>
+
+        <h3>Subcategories</h3>
+        <div id="subcategories">
+            <!-- Subcategory fields will be added here -->
+        </div>
+        <button type="button" onclick="addSubcategory()">Add Subcategory</button>
+        
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+
+    <script>
+        // Function to add a new subcategory field set
+        function addSubcategory() {
+            const subcategoriesDiv = document.getElementById('subcategories');
+            const subcategoryCount = subcategoriesDiv.children.length;
+            const subcategoryDiv = document.createElement('div');
+
+            subcategoryDiv.innerHTML = `
+                <hr>
+                <h4>Subcategory ${subcategoryCount + 1}</h4>
+                <div>
+                    <label for="subcategoryName${subcategoryCount}">Subcategory Name:</label>
+                    <input type="text" id="subcategoryName${subcategoryCount}" name="subcategoryName" required>
+                </div>
+                <div>
+                    <label for="subcategoryDescription${subcategoryCount}">Subcategory Description:</label>
+                    <input type="text" id="subcategoryDescription${subcategoryCount}" name="subcategoryDescription" required>
+                </div>
+                <div>
+                    <label for="subcategoryImageURL${subcategoryCount}">Subcategory Image URL:</label>
+                    <input type="url" id="subcategoryImageURL${subcategoryCount}" name="subcategoryImageURL" required>
+                </div>
+                <div>
+                    <label for="subcategoryImageAltText${subcategoryCount}">Subcategory Image Alt Text:</label>
+                    <input type="text" id="subcategoryImageAltText${subcategoryCount}" name="subcategoryImageAltText" required>
+                </div>
+                
+                <h5>Types</h5>
+                <div id="types${subcategoryCount}">
+                    <!-- Type fields will be added here -->
+                </div>
+                <button type="button" onclick="addType(${subcategoryCount})">Add Type</button>
+            `;
+            subcategoriesDiv.appendChild(subcategoryDiv);
+        }
+
+        // Function to add a new type field set to a specific subcategory
+        function addType(subcategoryIndex) {
+            const typesDiv = document.getElementById(`types${subcategoryIndex}`);
+            const typeCount = typesDiv.children.length;
+            const typeDiv = document.createElement('div');
+
+            typeDiv.innerHTML = `
+                <hr>
+                <h5>Type ${typeCount + 1}</h5>
+                <div>
+                    <label for="typeName${subcategoryIndex}_${typeCount}">Type Name:</label>
+                    <input type="text" id="typeName${subcategoryIndex}_${typeCount}" name="typeName" required>
+                </div>
+                <h6>Subtypes</h6>
+                <div id="subTypes${subcategoryIndex}_${typeCount}">
+                    <!-- Subtype fields will be added here -->
+                </div>
+                <button type="button" onclick="addSubtype(${subcategoryIndex}, ${typeCount})">Add Subtype</button>
+            `;
+            typesDiv.appendChild(typeDiv);
+        }
+
+        // Function to add a new subtype field set to a specific type
+        function addSubtype(subcategoryIndex, typeIndex) {
+            const subTypesDiv = document.getElementById(`subTypes${subcategoryIndex}_${typeIndex}`);
+            const subTypeCount = subTypesDiv.children.length;
+            const subTypeDiv = document.createElement('div');
+
+            subTypeDiv.innerHTML = `
+                <hr>
+                <h6>Subtype ${subTypeCount + 1}</h6>
+                <div>
+                    <label for="subtypeName${subcategoryIndex}_${typeIndex}_${subTypeCount}">Subtype Name:</label>
+                    <input type="text" id="subtypeName${subcategoryIndex}_${typeIndex}_${subTypeCount}" name="subtypeName" required>
+                </div>
+                <div>
+                    <label for="subtypeImageURL${subcategoryIndex}_${typeIndex}_${subTypeCount}">Subtype Image URL:</label>
+                    <input type="url" id="subtypeImageURL${subcategoryIndex}_${typeIndex}_${subTypeCount}" name="subtypeImageURL" required>
+                </div>
+                <div>
+                    <label for="subtypeImageAltText${subcategoryIndex}_${typeIndex}_${subTypeCount}">Subtype Image Alt Text:</label>
+                    <input type="text" id="subtypeImageAltText${subcategoryIndex}_${typeIndex}_${subTypeCount}" name="subtypeImageAltText" required>
+                </div>
+            `;
+            subTypesDiv.appendChild(subTypeDiv);
+        }
+
+        // Function to handle form submission
+        document.getElementById('categoryForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const categoryData = {
+                name: document.getElementById('categoryName').value,
+                description: document.getElementById('categoryDescription').value,
+                image: {
+                    url: document.getElementById('categoryImageURL').value,
+                    altText: document.getElementById('categoryImageAltText').value
+                },
+                subCategories: []
+            };
+
+            // Collect subcategories data
+            const subcategories = document.querySelectorAll('#subcategories > div');
+            subcategories.forEach((subcategory, subcategoryIndex) => {
+                const subcategoryData = {
+                    name: subcategory.querySelector(`[id="subcategoryName${subcategoryIndex}"]`).value,
+                    description: subcategory.querySelector(`[id="subcategoryDescription${subcategoryIndex}"]`).value,
+                    image: {
+                        url: subcategory.querySelector(`[id="subcategoryImageURL${subcategoryIndex}"]`).value,
+                        altText: subcategory.querySelector(`[id="subcategoryImageAltText${subcategoryIndex}"]`).value
+                    },
+                    types: []
+                };
+
+                // Collect types data
+                const types = subcategory.querySelectorAll(`#types${subcategoryIndex} > div`);
+                types.forEach((type, typeIndex) => {
+                    const typeData = {
+                        name: type.querySelector(`[id="typeName${subcategoryIndex}_${typeIndex}"]`).value,
+                        subTypes: []
+                    };
+
+                    // Collect subtypes data
+                    const subTypes = type.querySelectorAll(`#subTypes${subcategoryIndex}_${typeIndex} > div`);
+                    subTypes.forEach((subType, subTypeIndex) => {
+                        const subTypeData = {
+                            name: subType.querySelector(`[id="subtypeName${subcategoryIndex}_${typeIndex}_${subTypeIndex}"]`).value,
+                            image: {
+                                url: subType.querySelector(`[id="subtypeImageURL${subcategoryIndex}_${typeIndex}_${subTypeIndex}"]`).value,
+                                altText: subType.querySelector(`[id="subtypeImageAltText${subcategoryIndex}_${typeIndex}_${subTypeIndex}"]`).value
+                            }
+                        };
+                        typeData.subTypes.push(subTypeData);
+                    });
+
+                    subcategoryData.types.push(typeData);
+                });
+
+                categoryData.subCategories.push(subcategoryData);
+            });
+
+            // Send POST request
+            fetch('https://lampros-backend.vercel.app/api/category/category', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(categoryData)
+            })
+            .then(response => response.json())
+            .then(data => alert('Category added successfully!'))
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
